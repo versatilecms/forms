@@ -1,0 +1,27 @@
+{
+    "name": "versatilecms/forms",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Fábio Assunção",
+            "email": "fabio23gt@gmail.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "~6.0"
+    },
+    "autoload": {
+        "classmap": [],
+        "psr-4": {
+            "Versatile\\Forms\\": "src/",
+            "Versatile\\Forms\\Database\\": "database/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Versatile\\Forms\\Providers\\VersatileFormsServiceProvider"
+            ]
+        }
+    }
+}
