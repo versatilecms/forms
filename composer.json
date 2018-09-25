@@ -23,5 +23,7 @@
                 "Versatile\\Forms\\Providers\\VersatileFormsServiceProvider"
             ]
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
