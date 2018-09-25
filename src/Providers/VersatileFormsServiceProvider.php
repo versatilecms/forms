@@ -37,6 +37,26 @@ class VersatileFormsServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom($this->packagePath . 'config/versatile-forms.php', 'versatile-forms');
+
+        if ($this->app->runningInConsole()) {
+            $this->strapPublishers();
+        }
+    }
+
+    /**
+     * Register the publishable files.
+     */
+    private function strapPublishers()
+    {
+        $publishable = [
+            'config' => [
+                $this->packagePath . 'config/versatile-forms.php' => config_path('versatile-forms.php'),
+            ]
+        ];
+
+        foreach ($publishable as $group => $paths) {
+            $this->publishes($paths, $group);
+        }
     }
 
     /**
