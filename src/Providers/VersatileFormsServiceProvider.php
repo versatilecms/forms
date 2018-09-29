@@ -3,10 +3,14 @@
 namespace Versatile\Forms\Providers;
 
 use Illuminate\Foundation\AliasLoader;
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Versatile\Forms\Forms;
 use Versatile\Forms\Commands;
 use Versatile\Forms\Facades\Forms as FormsFacade;
+
+use Versatile\Forms\Enquiry;
+use Versatile\Forms\Form;
+use Versatile\Forms\FormInput;
 
 class VersatileFormsServiceProvider extends ServiceProvider
 {

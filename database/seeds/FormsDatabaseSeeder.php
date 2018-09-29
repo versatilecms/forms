@@ -16,9 +16,9 @@ class FormsDatabaseSeeder extends AbstractBreadSeeder
      */
     public function run()
     {
-        $this->seed('EnquiriesSeeder');
-        $this->seed('FormsSeeder');
-        $this->seed('InputsSeeder');
-        $this->seed('DataSeeder');
+        $this->seed('EnquiriesTableSeeder');
+        $this->seed('FormsTableSeeder');
+        $this->seed('InputsTableSeeder');
+        $this->seed('DataTableSeeder');
     }
 }

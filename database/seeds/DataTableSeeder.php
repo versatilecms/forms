@@ -4,7 +4,7 @@ use Versatile\Forms\Form;
 use Versatile\Forms\FormInput;
 use Illuminate\Database\Seeder;
 
-class DataSeeder extends Seeder
+class DataTableSeeder extends Seeder
 {
     protected $inputs = [
         'name' => 'text',
@@ -43,7 +43,7 @@ class DataSeeder extends Seeder
                 'form_id' => $form->id,
                 'label' => ucwords(str_replace('_', ' ', $key)),
                 'type' => $value,
-                'required' => 1,
+                'required' => true,
                 'order' => $order,
             ])->save();
 

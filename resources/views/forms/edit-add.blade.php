@@ -271,7 +271,7 @@
                     $('.dd').removeClass('dd-dragging');
 
                     // Post the request
-                    $.post('{{ route('versatile.forms.order') }}', {
+                    $.post('{{ route('versatile.inputs.order') }}', {
                         order: JSON.stringify($('.dd').nestable('serialize')),
                         _token: '{{ csrf_token() }}'
                     }, function (data) {

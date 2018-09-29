@@ -14,30 +14,154 @@ use Versatile\Core\Http\Controllers\BaseController;
 class FormController extends BaseController
 {
     /**
-     * Get the actions available for the resource.
+     * Informs if DataType will be loaded from the database or setup
      *
-     * @return array
+     * @var bool
      */
-    public function actions()
+    protected $dataTypeFromDatabase = false;
+
+    public function setup()
     {
-        return [
-            ViewEnquiriesAction::class
-        ];
+        $this->bread->setName('forms');
+        $this->bread->setSlug ('forms');
+
+        $this->bread->setDisplayNameSingular(__('versatile::seeders.data_types.form.singular'));
+        $this->bread->setDisplayNamePlural(__('versatile::seeders.data_types.form.plural'));
+
+        $this->bread->setIcon('versatile-documentation');
+        $this->bread->setModel(Form::class);
+
+        $this->bread->addAction(ViewEnquiriesAction::class);
+
+        $this->bread->addDataRows([
+            [
+                'field' => 'id',
+                'type' => 'number',
+                'display_name' => 'id',
+                'required' => true,
+                'browse' => true,
+                'read' => true,
+                'edit' => true,
+                'add' => true,
+                'delete' => true,
+                'details' => []
+            ],
+
+            [
+                'field' => 'title',
+                'type' => 'text',
+                'display_name' => 'title',
+                'required' => true,
+                'browse' => true,
+                'read' => true,
+                'edit' => true,
+                'add' => true,
+                'delete' => true,
+                'details' => []
+            ],
+
+            [
+                'field' => 'mailto',
+                'type' => 'text',
+                'display_name' => 'mailto',
+                'required' => true,
+                'browse' => true,
+                'read' => true,
+                'edit' => true,
+                'add' => true,
+                'delete' => true,
+                'details' => []
+            ],
+
+            [
+                'field' => 'hook',
+                'type' => 'text',
+                'display_name' => 'hook',
+                'required' => true,
+                'browse' => true,
+                'read' => true,
+                'edit' => true,
+                'add' => true,
+                'delete' => true,
+                'details' => []
+            ],
+
+            [
+                'field' => 'layout',
+                'type' => 'text',
+                'display_name' => 'layout',
+                'required' => true,
+                'browse' => true,
+                'read' => true,
+                'edit' => true,
+                'add' => true,
+                'delete' => true,
+                'details' => []
+            ],
+
+            [
+                'field' => 'email_template',
+                'type' => 'text',
+                'display_name' => 'email_template',
+                'required' => true,
+                'browse' => true,
+                'read' => true,
+                'edit' => true,
+                'add' => true,
+                'delete' => true,
+                'details' => []
+            ],
+
+            [
+                'field' => 'message_success',
+                'type' => 'text',
+                'display_name' => 'message_success',
+                'required' => true,
+                'browse' => true,
+                'read' => true,
+                'edit' => true,
+                'add' => true,
+                'delete' => true,
+                'details' => []
+            ],
+
+            [
+                'field' => 'created_at',
+                'type' => 'text',
+                'display_name' => 'created_at',
+                'required' => true,
+                'browse' => true,
+                'read' => true,
+                'edit' => true,
+                'add' => true,
+                'delete' => true,
+                'details' => []
+            ],
+
+            [
+                'field' => 'updated_at',
+                'type' => 'text',
+                'display_name' => 'updated_at',
+                'required' => true,
+                'browse' => true,
+                'read' => true,
+                'edit' => true,
+                'add' => true,
+                'delete' => true,
+                'details' => []
+            ],
+        ]);
     }
 
     /**
-     * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
      */
-    public function create(Request $request)
+    public function create()
     {
         Versatile::canOrFail('add_forms');
 
-        $dataTypeSlug = $this->getDataTypeSlug($request);
-        $dataType = $this->getDataType($dataTypeSlug);
-
         return view('versatile-forms::forms.edit-add', [
-            'dataType' => $dataType,
+            'dataType' => $this->bread,
             'layouts' => Layouts::getLayouts('versatile-forms'),
             'emailTemplates' => Layouts::getLayouts('versatile-forms', 'email-templates'),
         ]);
@@ -50,9 +174,6 @@ class FormController extends BaseController
     public function store(Request $request)
     {
         Versatile::canOrFail('add_forms');
-
-        $dataTypeSlug = $this->getDataTypeSlug($request);
-        $dataType = $this->getDataType($dataTypeSlug);
 
         if ($request->input('hook')) {
             $validator = FormValidators::validateHook($request);
@@ -85,7 +206,7 @@ class FormController extends BaseController
                 'form_id' => $form->id,
                 'label' => ucwords(str_replace('_', ' ', $key)),
                 'type' => $value,
-                'required' => 1,
+                'required' => true,
                 'order' => $order,
             ])->save();
 
@@ -95,17 +216,16 @@ class FormController extends BaseController
         return redirect()
             ->route('versatile.forms.edit', ['id' => $form->id])
             ->with([
-                'message' => __('versatile::generic.successfully_added_new') . " {$dataType->display_name_singular}",
+                'message' => __('versatile::generic.successfully_added_new') . " {$this->bread->display_name_singular}",
                 'alert-type' => 'success',
             ]);
     }
 
     /**
-     * @param Request $request
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show(Request $request, $id)
+    public function show($id)
     {
         Versatile::canOrFail('read_forms');
 
@@ -119,20 +239,17 @@ class FormController extends BaseController
     }
 
     /**
-     * @param Request $request
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit(Request $request, $id)
+    public function edit($id)
     {
         Versatile::canOrFail('edit_forms');
 
         $form = Form::findOrFail($id);
-        $dataTypeSlug = $this->getDataTypeSlug($request);
-        $dataType = $this->getDataType($dataTypeSlug);
 
         return view('versatile-forms::forms.edit-add', [
-            'dataType' => $dataType,
+            'dataType' => $this->bread,
             'form' => $form,
             'layouts' => Layouts::getLayouts('versatile-forms'),
             'emailTemplates' => Layouts::getLayouts('versatile-forms', 'email-templates'),
@@ -148,8 +265,6 @@ class FormController extends BaseController
     {
         Versatile::canOrFail('edit_forms');
 
-        $dataTypeSlug = $this->getDataTypeSlug($request);
-        $dataType = $this->getDataType($dataTypeSlug);
         $form = Form::findOrFail($id);
 
         if ($request->input('hook')) {
@@ -173,7 +288,7 @@ class FormController extends BaseController
         return redirect()
             ->back()
             ->with([
-                'message' => __('versatile::generic.successfully_updated') . " {$dataType->display_name_singular}",
+                'message' => __('versatile::generic.successfully_updated') . " {$this->bread->display_name_singular}",
                 'alert-type' => 'success',
             ]);
     }

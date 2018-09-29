@@ -13,17 +13,126 @@ use Versatile\Core\Http\Controllers\BaseController;
 
 class EnquiryController extends BaseController
 {
-
     /**
-     * @param Request $request
+     * Informs if DataType will be loaded from the database or setup
+     *
+     * @var bool
+     */
+    protected $dataTypeFromDatabase = false;
+
+    public function setup()
+    {
+        $this->bread->setName('enquiries');
+        $this->bread->setSlug('enquiries');
+
+        $this->bread->setDisplayNameSingular(__('versatile::seeders.data_types.enquiry.singular'));
+        $this->bread->setDisplayNamePlural(__('versatile::seeders.data_types.enquiry.plural'));
+
+        $this->bread->setIcon('versatile-mail');
+        $this->bread->setModel(Enquiry::class);
+
+        $this->bread->addDataRows([
+            [
+                'field' => 'id',
+                'type' => 'number',
+                'display_name' => 'ID',
+                'required' => true,
+                'browse' => true,
+                'read' => true,
+                'edit' => true,
+                'add' => true,
+                'delete' => true,
+                'details' => [],
+            ],
+
+            [
+                'field' => 'form_id',
+                'type' => 'number',
+                'display_name' => 'Form ID',
+                'required' => true,
+                'browse' => true,
+                'read' => true,
+                'edit' => true,
+                'add' => true,
+                'delete' => true,
+                'details' => [],
+            ],
+
+            [
+                'field' => 'data',
+                'type' => 'text',
+                'display_name' => 'Data',
+                'required' => true,
+                'browse' => false,
+                'read' => true,
+                'edit' => true,
+                'add' => true,
+                'delete' => true,
+                'details' => [],
+            ],
+
+            [
+                'field' => 'mailto',
+                'type' => 'text',
+                'display_name' => 'Mailto',
+                'required' => true,
+                'browse' => true,
+                'read' => true,
+                'edit' => true,
+                'add' => true,
+                'delete' => true,
+                'details' => [],
+            ],
+
+            [
+                'field' => 'ip_address',
+                'type' => 'text',
+                'display_name' => 'IP Address',
+                'required' => true,
+                'browse' => true,
+                'read' => true,
+                'edit' => true,
+                'add' => true,
+                'delete' => true,
+                'details' => [],
+            ],
+
+            [
+                'field' => 'created_at',
+                'type' => 'text',
+                'display_name' => 'Created At',
+                'required' => true,
+                'browse' => true,
+                'read' => true,
+                'edit' => true,
+                'add' => true,
+                'delete' => true,
+                'details' => [],
+            ],
+
+            [
+                'field' => 'updated_at',
+                'type' => 'text',
+                'display_name' => 'Updated At',
+                'required' => true,
+                'browse' => true,
+                'read' => true,
+                'edit' => true,
+                'add' => true,
+                'delete' => true,
+                'details' => [],
+            ],
+        ]);
+    }
+    /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
      */
-    public function create(Request $request)
+    public function create()
     {
         Versatile::canOrFail('add_enquiries');
 
         return view('versatile-forms::enquiries.edit-add', [
-            'dataType' => $this->getDataType($request),
+            'dataType' => $this->bread,
         ]);
     }
 
@@ -94,24 +203,23 @@ class EnquiryController extends BaseController
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show(Request $request, $id)
+    public function show($id)
     {
         Versatile::canOrFail('read_enquiries');
 
         $enquiry = Enquiry::findOrFail($id);
 
         return view('versatile-forms::enquiries.view', [
-            'dataType' => $this->getDataType($request),
+            'dataType' => $this->bread,
             'enquiry' => $enquiry,
         ]);
     }
 
     /**
-     * @param Request $request
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit(Request $request, $id)
+    public function edit($id)
     {
         Versatile::canOrFail('edit_enquiries');
 
@@ -131,7 +239,7 @@ class EnquiryController extends BaseController
     {
         Versatile::canOrFail('edit_enquiries');
 
-        $dataType = $this->getDataType($request);
+        $dataType = $this->bread;
 
         return redirect('versatile-forms::enquiries.index')
             ->with([

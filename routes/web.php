@@ -4,12 +4,14 @@
  * Admin Route/s
  */
 Route::group([
-    'as' => 'versatile.forms.',
+    'as' => 'versatile.',
     'prefix' => 'admin/forms/',
     'middleware' => ['web', 'admin.user'],
     'namespace' => '\Versatile\Forms\Http\Controllers'
 ], function () {
-    Route::post('order', ['uses' => "InputController@order", 'as' => 'order']);
+    Versatile::resource('enquiries', 'EnquiryController');
+    Versatile::resource('forms', 'FormController');
+    Versatile::resource('inputs', 'InputController');
 });
 
 /**
